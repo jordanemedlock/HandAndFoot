@@ -1,4 +1,4 @@
-var {Card, Suit, Rank, Color} = require('./card.js')
+var {Card, Suit, Rank, Color} = require('../models/card.js')
 var _ = require('lodash')
 
 exports.Renderer = Renderer = class Renderer {

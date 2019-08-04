@@ -1,4 +1,4 @@
-var {Card, Rank, Suit, Color} = require('./card.js')
+var {Card, Rank, Suit, Color} = require('../models/card.js')
 var {CardRenderer, RankRenderer, SuitRenderer} = require('./renderer.js')
 
 var map = {};

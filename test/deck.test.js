@@ -1,4 +1,4 @@
-const {Deck, StandardDeck, MultiDeck} = require('../deck.js')
+const {Deck, StandardDeck, MultiDeck} = require('../app/models/deck.js')
 
 test('a standard deck should default to 52 cards without a argument', () => {
 	var deck = new StandardDeck();
