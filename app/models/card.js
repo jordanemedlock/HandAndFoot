@@ -11,6 +11,10 @@ exports.Card = Card = class Card {
 	getSuit() {
 		return this.suit;
 	}
+
+	equals(other) {
+		return this.rank.equals(other.rank) && this.suit.equals(other.suit);
+	}
 }
 
 exports.Rank = Rank = class Rank {
@@ -18,11 +22,19 @@ exports.Rank = Rank = class Rank {
 		this.value = value
 	}
 
+	equals(rank) {
+		return rank.value == this.value;
+	}
+
 }
 
 exports.Suit = Suit = class Suit {
 	constructor(value) {
 		this.value = value;
+	}
+
+	equals(suit) {
+		return suit.value == this.value;
 	}
 
 	getColor() {
@@ -40,6 +52,10 @@ exports.Suit = Suit = class Suit {
 exports.Color = Color = class Color {
 	constructor(value) {
 		this.value = value;
+	}
+
+	equals(color) {
+		return color.value == this.value;
 	}
 }
 

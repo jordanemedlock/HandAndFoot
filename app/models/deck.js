@@ -10,6 +10,33 @@ exports.Deck = Deck = class Deck {
 	initialize() {
 		this.cards = [];
 	}
+
+	size() {
+		return this.cards.length;
+	}
+
+	contains(card) {
+		return _.some(this.cards, (c) => c.equals(card));
+	}
+
+	// end of the array is top
+	// top of deck is where you can see the back of the card
+	drawFromTop(n) {
+		var start = this.cards.length - n - 1;
+		var ret = this.cards.splice(start, n);
+		return ret;
+	}
+
+	// start of array is back
+	// bottom is where you can see what card it is when you pull
+	drawFromBottom(n) {
+		return this.cards.splice(0, n);
+	}
+
+	// synonym for drawFromTop
+	draw(n) { 
+		return this.drawFromTop(n); 
+	}
 }
 
 exports.StandardDeck = StandardDeck = class StandardDeck extends Deck {
@@ -30,15 +57,16 @@ exports.StandardDeck = StandardDeck = class StandardDeck extends Deck {
 }
 
 exports.MultiDeck = MultiDeck = class MultiDeck extends Deck {
-	constructor(numDecks) {
+	constructor(numDecks, deckMaker) {
 		super();
 		this.numDecks = numDecks;
+		this.deckMaker = deckMaker;
 	}
 
 	initialize() {
 		super.initialize();
 		this.cards = _.chain(this.numDecks)
-									.times((i) => new StandardDeck())
+									.times(this.deckMaker)
 									.each((d) => d.initialize())
 									.flatMap((d) => d.cards)
 									.value();
