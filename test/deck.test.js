@@ -61,16 +61,6 @@ test('contains returns true for a standard deck containing AH', () => {
 	expect(deck.contains(ah)).toBe(true);
 })
 
-test('equivalent cards should equal eachother and oposite', () => {
-	var card1 = new Card(Rank.ACE, Suit.HEARTS);
-	var card2 = new Card(Rank.ACE, Suit.HEARTS);
-	expect(card1.equals(card2)).toBe(true);
-	var card3 = new Card(Rank.ACE, Suit.SPADES);
-	expect(card1.equals(card3)).toBe(false);
-	var card4 = new Card(Rank.TWO, Suit.HEARTS);
-	expect(card1.equals(card4)).toBe(false);
-})
-
 test('drawing a card decreases decksize by 1 and returns one card', () => {
 	var deck = new StandardDeck();
 	deck.initialize();

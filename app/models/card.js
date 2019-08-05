@@ -85,8 +85,8 @@ exports.Suit.SPADES = SPADES = new Suit('SPADES')
 
 exports.Suit.ALL = SUITS = [HEARTS, DIAMONDS, CLUBS, SPADES];
 
-exports.BLACK = BLACK = new Color('BLACK')
-exports.RED = RED = new Color('RED')
+exports.Color.BLACK = BLACK = new Color('BLACK')
+exports.Color.RED = RED = new Color('RED')
 
 exports.COLORS = COLORS = [RED,BLACK];
 
