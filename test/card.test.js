@@ -43,3 +43,32 @@ test('test getColor', () => {
 	expect(Suit.SPADES.getColor().equals(Color.BLACK)).toBe(true);
 	expect(Suit.CLUBS.getColor().equals(Color.BLACK)).toBe(true);
 })
+
+test('test isWild', () => {
+	expect((new Card(Rank.TWO, Suit.HEARTS)).isWild()).toBe(true);
+	expect((new Card(Rank.TWO, Suit.SPADES)).isWild()).toBe(true);
+	expect((new Card(Rank.FIVE, Suit.SPADES)).isWild()).toBe(false);
+	expect(Card.RED_JOKER.isWild()).toBe(true);
+})
+
+test('test isNormalCard', () => {
+	expect((new Card(Rank.TWO, Suit.HEARTS)).isNormalCard()).toBe(false);
+	expect(Card.RED_JOKER.isNormalCard()).toBe(false);
+	expect((new Card(Rank.THREE, Suit.HEARTS)).isNormalCard()).toBe(false);
+	expect((new Card(Rank.THREE, Suit.SPADES)).isNormalCard()).toBe(false);
+	expect((new Card(Rank.FIVE, Suit.SPADES)).isNormalCard()).toBe(true);
+	expect((new Card(Rank.ACE, Suit.HEARTS)).isNormalCard()).toBe(true);
+})
+
+test('test points', () => {
+	expect((new Card(Rank.FIVE, Suit.HEARTS)).points()).toBe(5);
+	expect((new Card(Rank.SEVEN, Suit.HEARTS)).points()).toBe(5);
+	expect((new Card(Rank.EIGHT, Suit.HEARTS)).points()).toBe(10);
+	expect((new Card(Rank.TEN, Suit.HEARTS)).points()).toBe(10);
+	expect((new Card(Rank.QUEEN, Suit.HEARTS)).points()).toBe(10);
+	expect((new Card(Rank.ACE, Suit.HEARTS)).points()).toBe(20);
+	expect((new Card(Rank.TWO, Suit.HEARTS)).points()).toBe(20);
+	expect((new Card(Rank.JOKER, Suit.HEARTS)).points()).toBe(50);
+	expect((new Card(Rank.THREE, Suit.HEARTS)).points()).toBe(100);
+	expect((new Card(Rank.THREE, Suit.CLUBS)).points()).toBe(50);
+})

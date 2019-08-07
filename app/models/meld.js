@@ -1,0 +1,93 @@
+const {Card, Rank, Suit} = require('./card.js')
+const _ = require('lodash')
+
+exports.Meld = Meld = class Meld {
+	constructor(rank, cards) {
+		this.rank = rank;
+		this.cards = cards;
+	}
+
+	validate() {
+		return this.isNormalMeld() ||
+					 this.isWildMeld() ||
+					 this.isRedThrees();
+	}
+
+	isNormalMeld() {
+		const numRank = this.numRank();
+		const numWild = this.numWild();
+		const total = numRank + numWild;
+		const size = this.size();
+		const ret = this.getRank().isNormalCard() && total == size && numRank >= 2 && total >= 3;
+		return ret;
+	}
+
+	isWildMeld() {
+		const ret = _.every(this.cards, (c) => c.isWild());
+		return ret;
+	}
+
+	isRedThrees() {
+		const ret = _.every(this.cards, (c) => c.isRedThree())
+		return ret;
+	}
+
+	numRank() {
+		return _.chain(this.cards)
+						.filter((c) => c.getRank().equals(this.rank))
+						.size()
+						.value();
+	}
+
+	numWild() {
+		return _.chain(this.cards)
+						.filter((c) => c.isWild())
+						.size()
+						.value();
+	}
+
+	isBook() {
+		return this.size() >= 7 && !this.getRank().isThree();
+	}
+
+	getBookKind() {
+		if (!this.isBook()) {
+			return null;
+		}
+		if (this.getRank().isWild()) {
+			return 'WILD';
+		}
+		if (this.getRank().isNormalCard()) {
+			if (this.numWild() > 0) {
+				return 'DIRTY';
+			}	else {
+				return 'PURE';
+			}
+		}
+
+		return null; // shouldn't be able to get here.
+	}
+
+	addCard(card) {
+		this.addCards([card]);
+	}
+
+	addCards(cards) {
+		this.cards = _.concat(this.cards, cards);
+	}
+
+	size() {
+		return this.cards.length;
+	}
+
+	getRank() {
+		return this.rank;
+	}
+
+	points() {
+		return _.chain(this.cards)
+						.map((c) => c.points())
+						.reduce((a,b) => a + b, 0)
+						.value();
+	}
+}

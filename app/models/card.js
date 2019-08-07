@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 exports.Card = Card = class Card {
 	constructor(rank, suit) {
 		this.rank = rank;
@@ -12,8 +14,38 @@ exports.Card = Card = class Card {
 		return this.suit;
 	}
 
+	isWild() {
+		return this.getRank().isWild();
+	}
+
+	isNormalCard() {
+		return this.getRank().isNormalCard();
+	}
+
+	isRedThree() {
+		return this.getRank().isThree() && this.getSuit().isRed();
+	}
+
+	isBlackThree() {
+		return this.getRank().isThree() && this.getSuit().isBlack();
+	}
+
 	equals(other) {
-		return this.rank.equals(other.rank) && this.suit.equals(other.suit);
+		return other instanceof Card && this.rank.equals(other.rank) && this.suit.equals(other.suit);
+	}
+
+	points() {
+		if (_.some(Rank.FIVE_POINTERS, (r) => r.equals(this.getRank()))) {
+			return 5;
+		} else if (_.some(Rank.TEN_POINTERS, (r) => r.equals(this.getRank()))) {
+			return 10;
+		} else if (_.some(Rank.TWENTY_POINTERS, (r) => r.equals(this.getRank()))) {
+			return 20;
+		} else if (this.getRank().equals(Rank.JOKER) || this.isBlackThree()) {
+			return 50;
+		} else if (this.isRedThree()) {
+			return 100;
+		}
 	}
 }
 
@@ -23,9 +55,20 @@ exports.Rank = Rank = class Rank {
 	}
 
 	equals(rank) {
-		return rank.value == this.value;
+		return rank instanceof Rank && rank.value == this.value;
 	}
 
+	isWild() {
+		return this.equals(Rank.TWO) || this.equals(Rank.JOKER);
+	}
+
+	isNormalCard() {
+		return !(this.isWild() || this.equals(Rank.THREE));
+	}
+
+	isThree() {
+		return this.equals(Rank.THREE);
+	}
 }
 
 exports.Suit = Suit = class Suit {
@@ -34,7 +77,7 @@ exports.Suit = Suit = class Suit {
 	}
 
 	equals(suit) {
-		return suit.value == this.value;
+		return suit instanceof Suit && suit.value == this.value;
 	}
 
 	getColor() {
@@ -46,6 +89,14 @@ exports.Suit = Suit = class Suit {
 			case SPADES:
 				return BLACK;
 		}
+	}
+
+	isRed() {
+		return this.getColor().equals(RED);
+	}
+
+	isBlack() {
+		return this.getColor().equals(BLACK);
 	}
 }
 
@@ -75,6 +126,10 @@ exports.Rank.QUEEN = QUEEN = new Rank('QUEEN')
 exports.Rank.KING = KING = new Rank('KING')
 exports.Rank.ACE = ACE = new Rank('ACE')
 exports.Rank.JOKER = JOKER = new Rank('JOKER')
+
+exports.Rank.FIVE_POINTERS = [FOUR,FIVE,SIX,SEVEN];
+exports.Rank.TEN_POINTERS = [EIGHT,NINE,TEN,JACK,QUEEN,KING];
+exports.Rank.TWENTY_POINTERS = [ACE,TWO];
 
 exports.Rank.ALL = [TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN,JACK,QUEEN,KING,ACE,JOKER];
 
