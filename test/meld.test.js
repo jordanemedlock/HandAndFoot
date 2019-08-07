@@ -1,5 +1,6 @@
 const {Meld} = require('../app/models/meld.js')
 const {Card, Rank, Suit} = require('../app/models/card.js')
+const _ = require('lodash')
 
 const AH1 = new Card(Rank.ACE, Suit.HEARTS);
 const AH2 = new Card(Rank.ACE, Suit.HEARTS);
@@ -32,7 +33,12 @@ const melds = [
 	[Rank.THREE, [ThH], 				true,		100],
 	[Rank.THREE, [ThS, ThC, ThS], false, 	null],
 	[Rank.THREE, [ThH, ThH, ThD], true, 	300],
-	[Rank.THREE, [ThH, ThH, TS], 	false,	null]
+	[Rank.THREE, [ThH, ThH, TS], 	false,	null],
+	[Rank.FIVE, _.times(7, () => RJ), false, null],
+
+	[Rank.FIVE, _.times(7, () => FH), true, 5*7 + 500],
+	[Rank.FIVE, _.chain(5).times(() => FH).concat([RJ,BJ]).value(), true, 5*5 + 100 + 300],
+	[Rank.TWO, _.times(7, () => RJ), true, 50*7 + 1000]
 ]
 
 describe('Meld', () => {
@@ -119,7 +125,4 @@ describe('Meld', () => {
 			expect(meld.points()).toBe(points);
 		}
 	)
-
-	test.todo('test other melds for points')
-	test.todo('test books for points')
 })

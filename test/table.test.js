@@ -7,7 +7,7 @@ test('adding and getting meld from table', () => {
 	var cards = [
 		new Card(Rank.FIVE, Suit.HEARTS), 
 		new Card(Rank.FIVE, Suit.HEARTS),
-		new Card(Rank.FIVE, Suit.HEARTS),
+		new Card(Rank.FIVE, Suit.HEARTS)
 	];
 	var meld = new Meld(rank, cards);
 	var table = new Table();

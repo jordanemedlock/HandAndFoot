@@ -5,12 +5,15 @@ exports.Meld = Meld = class Meld {
 	constructor(rank, cards) {
 		this.rank = rank;
 		this.cards = cards;
+		this.isValid = false;
 	}
 
 	validate() {
-		return this.isNormalMeld() ||
-					 this.isWildMeld() ||
-					 this.isRedThrees();
+		this.isValid = this.isValid ||
+									 this.isNormalMeld() ||
+									 this.isWildMeld() ||
+									 this.isRedThrees();
+		return this.isValid;
 	}
 
 	isNormalMeld() {
@@ -23,7 +26,7 @@ exports.Meld = Meld = class Meld {
 	}
 
 	isWildMeld() {
-		const ret = _.every(this.cards, (c) => c.isWild());
+		const ret = this.getRank().isWild() && _.every(this.cards, (c) => c.isWild());
 		return ret;
 	}
 
@@ -73,6 +76,7 @@ exports.Meld = Meld = class Meld {
 	}
 
 	addCards(cards) {
+		this.isValid = false;
 		this.cards = _.concat(this.cards, cards);
 	}
 
@@ -84,10 +88,35 @@ exports.Meld = Meld = class Meld {
 		return this.rank;
 	}
 
-	points() {
+	count() {
 		return _.chain(this.cards)
 						.map((c) => c.points())
 						.reduce((a,b) => a + b, 0)
 						.value();
+	}
+
+	points() {
+		if (!this.isValid) {
+			return null;
+		}
+		var count = this.count();
+		if (!this.isBook()) {
+			return count;
+		} else {
+			return count + this.base();
+		}
+	}
+
+	base() {
+		switch (this.getBookKind()) {
+			case 'DIRTY':
+				return 300;
+			case 'PURE':
+				return 500;
+			case 'WILD': 
+				return 1000;
+			default:
+				return 0;
+		}
 	}
 }
