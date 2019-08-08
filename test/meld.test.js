@@ -125,4 +125,12 @@ describe('Meld', () => {
 			expect(meld.points()).toBe(points);
 		}
 	)
+
+	test('red threes count as base never count', () => {
+		var meld = new Meld(Rank.THREE, [ThH, ThD]);
+		expect(meld.validate()).toBe(true);
+		expect(meld.base()).toBe(200);
+		expect(meld.count()).toBe(0);
+		expect(meld.points()).toBe(200);
+	})
 })

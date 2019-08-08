@@ -89,6 +89,9 @@ exports.Meld = Meld = class Meld {
 	}
 
 	count() {
+		if (this.getRank().isThree()) {
+			return 0;
+		}
 		return _.chain(this.cards)
 						.map((c) => c.points())
 						.reduce((a,b) => a + b, 0)
@@ -99,15 +102,19 @@ exports.Meld = Meld = class Meld {
 		if (!this.isValid) {
 			return null;
 		}
-		var count = this.count();
-		if (!this.isBook()) {
-			return count;
-		} else {
-			return count + this.base();
-		}
+		return this.count() + this.base();
 	}
 
 	base() {
+		if (this.getRank().isThree()) {
+			return _.chain(this.cards)
+							.map((c) => c.points())
+							.reduce((a,b) => a + b, 0)
+							.value();
+		}
+		if (!this.isBook()) {
+			return 0;
+		}
 		switch (this.getBookKind()) {
 			case 'DIRTY':
 				return 300;

@@ -2,15 +2,53 @@ const _ = require('lodash')
 
 exports.Table = Table = class Table {
 	constructor() {
-		this.meld = {};
+		this.melds = {};
 	}
 
 	getMeld(rank) {
-		return this.meld[rank.value];
+		return this.melds[rank.value];
 	}
 
-	addMeld(rank, set) {
-		this.meld[rank.value] = set;
+	addMeld(meld) {
+		this.melds[meld.getRank().value] = meld;
+	}
+
+	base() {
+		return _.chain(this.melds)
+						.map((m) => m.base())
+						.sum()
+						.value();
+	}
+
+	count() {
+		return _.chain(this.melds)
+						.map((m) => m.count())
+						.sum()
+						.value();
+	}
+
+	points() {
+		return this.base() + this.count();
+	}
+
+	books() {
+		return _.filter(this.melds, (m) => m.isBook())
+	}
+
+	pureBooks() {
+		return _.filter(this.books(), (m) => m.getBookKind() == 'PURE');
+	}
+	dirtyBooks() {
+		return _.filter(this.books(), (m) => m.getBookKind() == 'DIRTY');
+	}
+	wildBooks() {
+		return _.filter(this.books(), (m) => m.getBookKind() == 'WILD');
+	}
+
+	canGoOut() {
+		return this.pureBooks().length >= 1 && 
+					 this.dirtyBooks().length >= 1 && 
+					 this.wildBooks().length >= 1;
 	}
 
 }
