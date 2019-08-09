@@ -1,18 +1,12 @@
 const _ = require('lodash')
 const {Table} = require('./table.js')
 
-exports.Player = Player = class Player {
-	constructor() {
-	}
-
-	initialize(hand, foot) {
+exports.PlayerInfo = PlayerInfo = class PlayerInfo {
+	constructor(hand, foot) {
 		this.hand = hand;
 		this.foot = foot;
-		this.table = new Table();
 		this.inFoot = false;
-	}
-
-	makeMove(pile, deck, otherPlayers) {
+		this.table = new Table();
 	}
 
 	isInFoot() {
@@ -20,7 +14,7 @@ exports.Player = Player = class Player {
 	}
 
 	getPublic() {
-		return new Player.Public(this.hand.length, this.isInFoot(), this.table.copy());
+		return new PlayerInfo.Public(this.hand.length, this.isInFoot(), this.table.copy());
 	}
 
 	getHand() {
@@ -35,13 +29,28 @@ exports.Player = Player = class Player {
 		return this.table;
 	}
 
+
+	copy() {
+		var ret = new PlayerInfo(_.map(this.getHand(), (x) => x), _.map(this.getFoot(), (x) => x));
+		ret.table = this.getTable().copy();
+		ret.inFoot = this.isInFoot();
+		return ret;
+	}
+
 }
 
-Player.Public = class Public {
+PlayerInfo.Public = class Public {
 	constructor(numInHand, inFoot, table) {
 		this.numInHand = numInHand;
 		this.inFoot = inFoot;
 		this.table = table;
 	}
 }
+
+exports.Player = Player = class Player {
+	turn(turnStatus, playerInfo, gameInfo) {
+
+	}
+}
+
 

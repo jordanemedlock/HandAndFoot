@@ -67,8 +67,6 @@ exports.Meld = Meld = class Meld {
 				return 'PURE';
 			}
 		}
-
-		return null; // shouldn't be able to get here.
 	}
 
 	addCard(card) {
@@ -122,8 +120,6 @@ exports.Meld = Meld = class Meld {
 				return 500;
 			case 'WILD': 
 				return 1000;
-			default:
-				return 0;
 		}
 	}
 
