@@ -51,4 +51,14 @@ exports.Table = Table = class Table {
 					 this.wildBooks().length >= 1;
 	}
 
+
+	copy() {
+		var newTable = new Table();
+		_.each(this.melds, (m) => newTable.addMeld(m.copy()));
+		return newTable;
+	}
+
+	size() {
+		return _.size(this.melds);
+	}
 }

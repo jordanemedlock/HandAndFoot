@@ -126,4 +126,8 @@ exports.Meld = Meld = class Meld {
 				return 0;
 		}
 	}
+
+	copy() {
+		return new Meld(this.rank, this.cards);
+	}
 }

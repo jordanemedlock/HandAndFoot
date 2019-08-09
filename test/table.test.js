@@ -94,4 +94,25 @@ describe('Table', () => {
 		expect(new Table().canGoOut()).toBe(false);
 	})
 
+	test('size returns the number of melds', () => {
+		expect(table.size()).toBe(6);
+	})
+
+	test('copy returns a deep copy of the current table', () => {
+		var table = new Table();
+		var meld = new Meld(Rank.FIVE, getCards('5H', '5H', '5H'))
+		table.addMeld(meld);
+		var copiedTable = table.copy();
+		expect(copiedTable.size()).toBe(1);
+		var copiedMeld = copiedTable.getMeld(Rank.FIVE);
+		expect(copiedMeld.size()).toBe(3);
+		copiedMeld.addCards(getCards('5S', '5C'))
+		expect(copiedMeld.size()).toBe(5);
+		expect(meld.size()).toBe(3);
+		copiedTable.addMeld(new Meld(Rank.TEN, getCards('10S', '10S', '10S')))
+		expect(copiedTable.size()).toBe(2);
+		expect(table.size()).toBe(1);
+
+	})
+
 })

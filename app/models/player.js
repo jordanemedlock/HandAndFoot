@@ -2,15 +2,17 @@ const _ = require('lodash')
 const {Table} = require('./table.js')
 
 exports.Player = Player = class Player {
-	constructor(hand, foot) {
+	constructor() {
+	}
+
+	initialize(hand, foot) {
 		this.hand = hand;
 		this.foot = foot;
-		this.inFoot = false;
 		this.table = new Table();
+		this.inFoot = false;
 	}
 
 	makeMove(pile, deck, otherPlayers) {
-		return null;
 	}
 
 	isInFoot() {
@@ -18,7 +20,19 @@ exports.Player = Player = class Player {
 	}
 
 	getPublic() {
-		return new this.Player(this.hand.length, this.isInFoot(), this.table.copy());
+		return new Player.Public(this.hand.length, this.isInFoot(), this.table.copy());
+	}
+
+	getHand() {
+		return this.hand;
+	}
+
+	getFoot() {
+		return this.foot;
+	}
+
+	getTable() {
+		return this.table;
 	}
 
 }

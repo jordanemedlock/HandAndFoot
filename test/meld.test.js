@@ -133,4 +133,15 @@ describe('Meld', () => {
 		expect(meld.count()).toBe(0);
 		expect(meld.points()).toBe(200);
 	})
+
+	test('copy returns a copy of the current meld', () => {
+		var meld = new Meld(Rank.THREE, [ThH, ThD]);
+		expect(meld.validate()).toBe(true);
+		expect(meld.size()).toBe(2);
+		var copied = meld.copy();
+		expect(copied.size()).toBe(2);
+		copied.addCard(new Card(Rank.THREE, Suit.HEARTS));
+		expect(copied.size()).toBe(3);
+		expect(meld.size()).toBe(2);
+	})
 })
