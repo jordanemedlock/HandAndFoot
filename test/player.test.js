@@ -61,6 +61,24 @@ describe('PlayerInfo', () => {
 		playerInfo.moveRedThreesToTable();
 		expect(playerInfo.doesHaveRedThrees()).toBeFalsy();
 		expect(playerInfo.getTable().size()).toBe(1);
-		expect(playerInfo.getRedThrees().size()).toBe(1);
+		expect(playerInfo.getTable().getRedThrees().size()).toBe(1);
+	})
+
+	test('canPickupPile', () => {
+		playerInfo.hand = getCards('5H', '5S');
+		var pile = new Pile();
+		pile.discard(new Card(Rank.FIVE, Suit.HEARTS))
+
+		expect(playerInfo.canPickupPile(pile)).toBeTruthy();
+	})
+
+	test.todo('create more canPickupPile test cases')
+
+	test('getCardsInHandWithRank', () => {
+		playerInfo.hand = getCards('5H', '5S', '5H', '8H', '8S', '9H');
+
+		expect(playerInfo.getCardsInHandWithRank(Rank.FIVE)).toHaveLength(3);
+		expect(playerInfo.getCardsInHandWithRank(Rank.EIGHT)).toHaveLength(2);
+		expect(playerInfo.getCardsInHandWithRank(Rank.NINE)).toHaveLength(1);
 	})
 })

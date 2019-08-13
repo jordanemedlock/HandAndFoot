@@ -4,6 +4,10 @@ const {Meld} = require('../app/models/meld.js')
 const {Card, Rank, Suit} = require('../app/models/card.js')
 const {getCards, getPureMeld, getDirtyMeld} = require('./util.js')
 
+function xor(a,b) {
+	return (a ? !b : b);
+}
+
 var table = new Table();
 table.addMeld(new Meld(Rank.THREE, getCards('3H', '3D')))
 table.addMeld(getPureMeld(Rank.TWO, 7))
@@ -20,7 +24,7 @@ describe('Table', () => {
 		var meld = new Meld(rank, cards);
 		var table = new Table();
 		table.addMeld(meld);
-		expect(table.getMeld(rank).getRank().equals(rank)).toBe(true);
+		expect(table.getMelds(rank)[0].getRank().equals(rank)).toBe(true);
 	})
 
 	test.each([
@@ -130,7 +134,8 @@ describe('Table', () => {
 		var melds = table.getMeldsWithRank(Rank.FIVE);
 		expect(melds.length).toBe(2);
 		var [m1, m2] = melds;
-		expect(m1.isBook() ^ m2.isBook()).toBe(true);
+		expect(xor(m1.isBook(), m2.isBook())).toBe(true);
+
 
 	})
 })

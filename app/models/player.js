@@ -46,6 +46,32 @@ exports.PlayerInfo = PlayerInfo = class PlayerInfo {
 		return ret;
 	}
 
+	canPickupPile(pile) {
+		var card = pile.topCard();
+		var rank = card.getRank();
+		var frozen = pile.isFrozen();
+		var numInHand = this.getCardsInHandWithRank(rank).length;
+		var melds = this.getTable().getMelds(rank);
+
+		if (card.isNormalCard()) {
+			if (frozen) {
+				return numInHand >= 2;
+			} else {
+				if (melds.length > 0) {
+					return true;
+				} else {
+					return numInHand >= 2;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
+	getCardsInHandWithRank(rank) {
+		return _.filter(this.hand, (c) => c.getRank().equals(rank));
+	}
+
 }
 
 PlayerInfo.Public = class Public {

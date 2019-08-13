@@ -69,7 +69,7 @@ exports.Table = Table = class Table {
 	}
 
 	addRedThrees(cards) {
-		var meld = this.getMeld(Rank.THREE);
+		var meld = this.getRedThrees();
 		if (meld) {
 			meld.addCards(cards);
 		} else {

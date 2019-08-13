@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const {MultiDeck, StandardDeck} = require('./deck.js')
-const {DrawTwo} = require('./move.js')
+const {DrawTwo, PickUpPile} = require('./move.js')
 
 exports.Game = Game = class Game {
 	constructor(players) {
@@ -41,9 +41,10 @@ exports.Game = Game = class Game {
 	}
 
 	flipCard() {
-		this.pile.discard(this.deck.draw(1)[0]);
+		var topCard = this.deck.draw(1)[0];
+		this.pile.discard(topCard);
 		while (this.pile.topCard().isWild()) {
-			this.pile.discard(this.deck.draw(1));
+			this.pile.discard(this.deck.draw(1)[0]);
 		} 
 	}
 
@@ -73,11 +74,11 @@ exports.Game = Game = class Game {
 
 		var response = player.pickOption(options, playerInfo, gameInfo);
 
-		if (isintance(response, DrawTwo)) {
+		if (response instanceof DrawTwo) {
 			var [redThrees, others] = this.drawTwoish();
 			playerInfo.addRedThrees(redThrees);
 			playerInfo.addToHand(others);
-		} else if (isinstance(response, PickUp)) {
+		} else if (response instanceof PickUpPile) {
 			var cards = this.pile.pickUp();
 			playerInfo.addToHand(cards);
 		}
@@ -103,6 +104,23 @@ exports.Game = Game = class Game {
 		return new DrawTwo();
 	}
 
+	getPickupOption() {
+		return new PickUpPile();
+	}
+
+	getPublicInfos() {
+		return _.map(this.players, (p) => p.getPlayerInfo().getPublic());
+	}
+
+
+	getGameInfo() {
+		var pileSize = this.pile.size();
+		var topCard = this.pile.topCard();
+		var deckSize = this.deck.size();
+		var publicInfos = this.getPublicInfos();
+		var gameInfo = new GameInfo(pileSize, topCard, deckSize, publicInfos);
+		return gameInfo;
+	}
 	
 }
 
@@ -121,5 +139,30 @@ class IPlayer {
 
 	getPlayerInfo() {
 		return this.playerInfo;
+	}
+}
+
+class GameInfo {
+	constructor(pileSize, topCard, deckSize, publicInfos) {
+		this.pileSize = pileSize;
+		this.topCard = topCard;
+		this.deckSize = deckSize;
+		this.publicInfos = publicInfos;
+	}
+
+	getPileSize() {
+		return this.pileSize;
+	}
+
+	getTopCard() {
+		return this.topCard;
+	}
+
+	getDeckSize() {
+		return this.deckSize;
+	}
+
+	getPublicInfos() {
+		return this.publicInfos;
 	}
 }
