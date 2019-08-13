@@ -100,3 +100,49 @@ describe('Deck', () => {
 		expect(_.some(cards, (c) => deck.contains(c))).toBe(false);
 	})
 })
+
+describe('Pile', () => {
+	test('constructor', () => {
+		var pile = new Pile();
+		expect(pile.frozen).toBe(false);
+	})
+
+	test('discard', () => {
+		var pile = new Pile();
+		expect(pile.size()).toBe(0);
+		pile.discard(new Card(Rank.FIVE, Suit.HEARTS));
+		expect(pile.size()).toBe(1);
+		pile.discard(new Card(Rank.EIGHT, Suit.DIAMONDS));
+	})
+
+	test('pickup', () => {
+		var pile = new Pile();
+		pile.discard(new Card(Rank.ACE, Suit.SPADES));
+		var cards = pile.pickup();
+		expect(pile.size()).toBe(0);
+		expect(cards).toHaveLength(1);
+	})
+
+	test('isFrozen', () => {
+		var pile = new Pile();
+		expect(pile.isFrozen()).toBe(false);
+		pile.discard(new Card(Rank.THREE, Suit.SPADES));
+		expect(pile.isFrozen()).toBe(true);
+		pile.discard(new Card(Rank.FIVE, Suit.SPADES));
+		expect(pile.isFrozen()).toBe(false);
+		pile.discard(new Card(Rank.TWO, Suit.SPADES));
+		expect(pile.isFrozen()).toBe(true);
+		pile.discard(new Card(Rank.EIGHT, Suit.SPADES));
+		expect(pile.isFrozen()).toBe(true);
+		pile.pickup();
+		expect(pile.isFrozen()).toBe(false);
+	})
+
+	test('topCard', () => {
+		var pile = new Pile();
+		expect(pile.topCard()).toBe(null);
+		var card = new Card(Rank.FIVE, Suit.THREE);
+		pile.discard(card);
+		expect(pile.topCard()).toBe(card);
+	})
+})

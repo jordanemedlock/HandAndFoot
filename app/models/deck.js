@@ -58,7 +58,7 @@ exports.Pile = Pile = class Pile {
 	}
 
 	isFrozen() {
-		return this.frozen || this.topCard().isBlackThree();
+		return this.frozen || (!!this.topCard() && this.topCard().isBlackThree());
 	}
 
 	size() {
