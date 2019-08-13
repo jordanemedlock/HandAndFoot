@@ -29,6 +29,15 @@ exports.PlayerInfo = PlayerInfo = class PlayerInfo {
 		return this.table;
 	}
 
+	doesHaveRedThrees() {
+		return _.filter(this.hand, (c) => c.isRedThree()).length > 0;
+	}
+
+	moveRedThreesToTable() {
+		var [redThrees, rest] = _.partition(this.hand, (c) => c.isRedThree());
+		this.getTable().addRedThrees(redThrees);
+		this.hand = rest;
+	}
 
 	copy() {
 		var ret = new PlayerInfo(_.map(this.getHand(), (x) => x), _.map(this.getFoot(), (x) => x));
@@ -48,7 +57,15 @@ PlayerInfo.Public = class Public {
 }
 
 exports.Player = Player = class Player {
-	turn(turnStatus, playerInfo, gameInfo) {
+	constructor(name) {
+		this.name = name;
+	}
+
+	getName() {
+		return this.name;
+	}
+
+	pickOption(options, playerInfo, gameInfo) {
 
 	}
 }

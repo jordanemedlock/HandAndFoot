@@ -39,6 +39,40 @@ exports.Deck = Deck = class Deck {
 	}
 }
 
+exports.Pile = Pile = class Pile {
+	constructor() {
+		this.cards = [];
+		this.frozen = false;
+	}
+
+	pickup() {
+		this.frozen = false;
+		return this.cards.splice(0,this.cards.length);
+	}
+
+	discard(card) {
+		if (card.isWild()) {
+			this.frozen = true;
+		}
+		this.cards.push(card);
+	}
+
+	isFrozen() {
+		return this.frozen || this.topCard().isBlackThree();
+	}
+
+	size() {
+		return this.cards.length;
+	}
+
+	topCard() {
+		if (this.size() < 1) {
+			return null;
+		}
+		return this.cards[this.size() - 1];
+	}
+}
+
 exports.StandardDeck = StandardDeck = class StandardDeck extends Deck {
 	constructor(withJoker) {
 		super();

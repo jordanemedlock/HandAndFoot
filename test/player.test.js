@@ -48,4 +48,19 @@ describe('PlayerInfo', () => {
 		expect(_.size(playerInfo.getHand())).toBe(13);
 		expect(_.size(playerInfo.getFoot())).toBe(13);
 	})
+
+	test('doesHaveRedThrees', () => {
+		playerInfo.hand = getCards('3H', '5S');
+		expect(playerInfo.doesHaveRedThrees()).toBeTruthy();
+		playerInfo.hand = getCards('5S');
+		expect(playerInfo.doesHaveRedThrees()).toBeFalsy();
+	})
+
+	test('moveRedThreesToTable', () => {
+		playerInfo.hand = getCards('3H', '5S');
+		playerInfo.moveRedThreesToTable();
+		expect(playerInfo.doesHaveRedThrees()).toBeFalsy();
+		expect(playerInfo.getTable().size()).toBe(1);
+		expect(playerInfo.getRedThrees().size()).toBe(1);
+	})
 })

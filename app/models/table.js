@@ -2,15 +2,19 @@ const _ = require('lodash')
 
 exports.Table = Table = class Table {
 	constructor() {
-		this.melds = {};
+		this.melds = []
 	}
 
-	getMeld(rank) {
-		return this.melds[rank.value];
+	getMelds() {
+		return this.melds;
 	}
+
+	getMeldsWithRank(rank) {
+		return _.filter(this.melds, (m) => m.getRank().equals(rank));
+	} 
 
 	addMeld(meld) {
-		this.melds[meld.getRank().value] = meld;
+		this.melds.push(meld);
 	}
 
 	base() {
@@ -38,9 +42,11 @@ exports.Table = Table = class Table {
 	pureBooks() {
 		return _.filter(this.books(), (m) => m.getBookKind() == 'PURE');
 	}
+
 	dirtyBooks() {
 		return _.filter(this.books(), (m) => m.getBookKind() == 'DIRTY');
 	}
+
 	wildBooks() {
 		return _.filter(this.books(), (m) => m.getBookKind() == 'WILD');
 	}
@@ -60,5 +66,23 @@ exports.Table = Table = class Table {
 
 	size() {
 		return _.size(this.melds);
+	}
+
+	addRedThrees(cards) {
+		var meld = this.getMeld(Rank.THREE);
+		if (meld) {
+			meld.addCards(cards);
+		} else {
+			this.addMeld(new Meld(Rank.THREE, cards));	
+		}
+	}
+
+	getRedThrees() {
+		var melds = _.filter(this.melds, (m) => m.getRank().equals(Rank.THREE));
+		if (melds.length == 1) {
+			return melds[0];
+		} else {
+			return null;
+		}
 	}
 }

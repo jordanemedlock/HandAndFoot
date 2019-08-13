@@ -104,7 +104,7 @@ describe('Table', () => {
 		table.addMeld(meld);
 		var copiedTable = table.copy();
 		expect(copiedTable.size()).toBe(1);
-		var copiedMeld = copiedTable.getMeld(Rank.FIVE);
+		var [copiedMeld] = copiedTable.getMeldsWithRank(Rank.FIVE);
 		expect(copiedMeld.size()).toBe(3);
 		copiedMeld.addCards(getCards('5S', '5C'))
 		expect(copiedMeld.size()).toBe(5);
@@ -115,4 +115,22 @@ describe('Table', () => {
 
 	})
 
+	test('addRedThrees', () => {
+		var table = new Table();
+		table.addRedThrees(getCards('3H', '3D'))
+		expect(table.size()).toBe(1);
+		expect(table.getMeldsWithRank(Rank.THREE)[0].size()).toBe(2);
+	})
+
+	test('getMeldsWithRank', () => {
+		var table = new Table();
+		table.addMeld(getPureMeld(Rank.FIVE, 7))
+		table.addMeld(new Meld(Rank.FIVE, getCards('5H', '5D', '5S')))
+		table.addMeld(new Meld(Rank.EIGHT, getCards('8H','8H','8H')))
+		var melds = table.getMeldsWithRank(Rank.FIVE);
+		expect(melds.length).toBe(2);
+		var [m1, m2] = melds;
+		expect(m1.isBook() ^ m2.isBook()).toBe(true);
+
+	})
 })
